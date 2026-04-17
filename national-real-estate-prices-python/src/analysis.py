@@ -62,7 +62,7 @@ def download_cpi_if_missing(path: Path) -> None:
             "Index": raw["Index"],
         }
     )
-    cpi = cpi[(cpi["Year"] >= 1971) & (cpi["Year"] <= 2022)].reset_index(drop=True)
+    cpi = cpi[cpi["Year"] >= 1971].reset_index(drop=True)
     cpi.to_csv(path, index=False)
 
 
@@ -372,7 +372,7 @@ def main() -> None:
             df,
             "Consumer_Inflation_Rate",
             "Mortgage_Rate",
-            "Mortgage Rate vs Consumer Inflation Rate (1991-2022)",
+            "Mortgage Rate vs Consumer Inflation Rate (Monthly Series)",
             "reg_df_mortgage_vs_cpi.png",
         )
     )
@@ -381,7 +381,7 @@ def main() -> None:
             df,
             "Mortgage_Rate",
             "House_Inflation_Rate_USA",
-            "House Inflation Rate (USA) vs Mortgage Rate (1991-2022)",
+            "House Inflation Rate (USA) vs Mortgage Rate (Monthly Series)",
             "reg_df_house_usa_vs_mortgage.png",
         )
     )
@@ -419,7 +419,7 @@ def main() -> None:
             df2,
             "Consumer_Inflation_Rate",
             "Mortgage_Rate",
-            "Mortgage Rate vs Consumer Inflation Rate (1978-2022)",
+            "Mortgage Rate vs Consumer Inflation Rate (Quarterly Series)",
             "reg_df2_mortgage_vs_cpi.png",
         )
     )
@@ -428,7 +428,7 @@ def main() -> None:
             df2,
             "Mortgage_Rate",
             "House_Inflation_Rate_Boulder",
-            "House Inflation Rate (Boulder) vs Mortgage Rate (1978-2022)",
+            "House Inflation Rate (Boulder) vs Mortgage Rate (Quarterly Series)",
             "reg_df2_boulder_vs_mortgage.png",
         )
     )
@@ -439,7 +439,7 @@ def main() -> None:
             df1,
             "Consumer_Inflation_Rate",
             "Mortgage_Rate",
-            "Mortgage Rate vs Consumer Inflation Rate (1971-2022)",
+            "Mortgage Rate vs Consumer Inflation Rate (Long Monthly Series)",
             "reg_df1_mortgage_vs_cpi.png",
         )
     )

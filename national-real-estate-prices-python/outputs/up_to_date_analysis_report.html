@@ -1,0 +1,600 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Up-to-Date Real Estate Analysis Report</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --accent: #14532d;
+      --line: #dde4ea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #e7f1ea 0%, var(--bg) 30%);
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 18px 40px; }
+    h1 { margin: 0 0 10px; font-size: 32px; color: #0f3d26; }
+    h2 { margin: 30px 0 10px; font-size: 22px; color: #123d2b; }
+    p, li { color: var(--muted); line-height: 1.45; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(18, 61, 43, 0.06);
+    }
+    .meta { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; }
+    .badge { background: #edf7ef; border: 1px solid #c9e6d1; border-radius: 10px; padding: 10px 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 8px; text-align: left; }
+    th { background: #f1f5f9; }
+    .table-wrap { overflow-x: auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+    .card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .card img { width: 100%; height: auto; display: block; background: #fff; }
+    .card figcaption { padding: 8px 10px; font-size: 12px; color: #4b5563; border-top: 1px solid var(--line); }
+    a { color: #0f4f2f; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Up-to-Date National Real Estate Analysis</h1>
+    <p>Generated from the refreshed dataset and current pipeline outputs.</p>
+
+    <div class="panel meta">
+      <div class="badge"><strong>Generated</strong><br>2026-04-17 12:44:43</div>
+      <div class="badge"><strong>Report File</strong><br>up_to_date_analysis_report.html</div>
+      <div class="badge"><strong>Data Directory</strong><br>C:\Codex\national-real-estate-prices-python\data</div>
+      <div class="badge"><strong>Output Directory</strong><br>C:\Codex\national-real-estate-prices-python\outputs</div>
+    </div>
+
+    <h2>Data Coverage</h2>
+    <div class="panel table-wrap"><table class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset</th>
+      <th>Latest Observation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CPI-U</td>
+      <td>2026-03</td>
+    </tr>
+    <tr>
+      <td>30-Year Mortgage Rate (monthly avg)</td>
+      <td>2026-04</td>
+    </tr>
+    <tr>
+      <td>HPI USA (monthly)</td>
+      <td>2026-01</td>
+    </tr>
+    <tr>
+      <td>HPI Mountain Division (monthly)</td>
+      <td>2026-01</td>
+    </tr>
+    <tr>
+      <td>HPI Colorado (quarterly)</td>
+      <td>2025 Q4</td>
+    </tr>
+    <tr>
+      <td>HPI Denver (quarterly)</td>
+      <td>2025 Q4</td>
+    </tr>
+    <tr>
+      <td>HPI Boulder (quarterly)</td>
+      <td>2025 Q4</td>
+    </tr>
+  </tbody>
+</table></div>
+
+    <h2>Top Regression Results (Updated)</h2>
+    <div class="panel table-wrap"><table class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Model</th>
+      <th>X</th>
+      <th>Y</th>
+      <th>N</th>
+      <th>Slope</th>
+      <th>R</th>
+      <th>P-value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>House Inflation Rate (Boulder) vs House Inflation Rate (Colorado)</td>
+      <td>House_Inflation_Rate_Colorado</td>
+      <td>House_Inflation_Rate_Boulder</td>
+      <td>192</td>
+      <td>0.9464</td>
+      <td>0.8886</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (Mountain) vs House Inflation Rate (USA)</td>
+      <td>House_Inflation_Rate_USA</td>
+      <td>House_Inflation_Rate_Mountain</td>
+      <td>420</td>
+      <td>1.2970</td>
+      <td>0.8874</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>Mortgage Rate vs Consumer Inflation Rate (Quarterly Series)</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>Mortgage_Rate</td>
+      <td>192</td>
+      <td>0.7222</td>
+      <td>0.6036</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>Mortgage Rate vs Consumer Inflation Rate (Long Monthly Series)</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>Mortgage_Rate</td>
+      <td>659</td>
+      <td>0.6411</td>
+      <td>0.5858</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (Colorado) vs Consumer Inflation Rate</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>House_Inflation_Rate_Colorado</td>
+      <td>192</td>
+      <td>0.7582</td>
+      <td>0.3895</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (Boulder) vs Consumer Inflation Rate</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>House_Inflation_Rate_Boulder</td>
+      <td>192</td>
+      <td>0.7050</td>
+      <td>0.3400</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (USA) vs Consumer Inflation Rate</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>House_Inflation_Rate_USA</td>
+      <td>420</td>
+      <td>1.0816</td>
+      <td>0.3354</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (Mountain) vs Consumer Inflation Rate</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>House_Inflation_Rate_Mountain</td>
+      <td>420</td>
+      <td>1.3770</td>
+      <td>0.2922</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>Mortgage Rate vs Consumer Inflation Rate (Monthly Series)</td>
+      <td>Consumer_Inflation_Rate</td>
+      <td>Mortgage_Rate</td>
+      <td>420</td>
+      <td>0.2179</td>
+      <td>0.1935</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (USA) vs Mortgage Rate (Monthly Series)</td>
+      <td>Mortgage_Rate</td>
+      <td>House_Inflation_Rate_USA</td>
+      <td>420</td>
+      <td>-0.5465</td>
+      <td>-0.1909</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>House Inflation Rate (Boulder) vs Mortgage Rate (Quarterly Series)</td>
+      <td>Mortgage_Rate</td>
+      <td>House_Inflation_Rate_Boulder</td>
+      <td>192</td>
+      <td>0.1238</td>
+      <td>0.0714</td>
+      <td>0.3247</td>
+    </tr>
+  </tbody>
+</table></div>
+
+    <h2>Baseline vs Updated (Overlap Window)</h2>
+    <div class="panel table-wrap"><table class="dataframe table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Frame</th>
+      <th>Model</th>
+      <th>N</th>
+      <th>Baseline Slope</th>
+      <th>Updated Slope</th>
+      <th>Delta Slope</th>
+      <th>Baseline R</th>
+      <th>Updated R</th>
+      <th>Delta R</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>df</td>
+      <td>House_USA_vs_CPIInfl</td>
+      <td>381</td>
+      <td>1.2224</td>
+      <td>1.1692</td>
+      <td>-0.0532</td>
+      <td>0.3537</td>
+      <td>0.3431</td>
+      <td>-0.0106</td>
+    </tr>
+    <tr>
+      <td>df</td>
+      <td>House_Mountain_vs_CPIInfl</td>
+      <td>381</td>
+      <td>1.7395</td>
+      <td>1.7032</td>
+      <td>-0.0363</td>
+      <td>0.3528</td>
+      <td>0.3451</td>
+      <td>-0.0076</td>
+    </tr>
+    <tr>
+      <td>df2</td>
+      <td>House_Boulder_vs_House_Colorado</td>
+      <td>179</td>
+      <td>0.9297</td>
+      <td>0.9366</td>
+      <td>0.0069</td>
+      <td>0.8801</td>
+      <td>0.8858</td>
+      <td>0.0058</td>
+    </tr>
+    <tr>
+      <td>df</td>
+      <td>House_USA_vs_Mortgage</td>
+      <td>381</td>
+      <td>-0.6001</td>
+      <td>-0.5757</td>
+      <td>0.0243</td>
+      <td>-0.2051</td>
+      <td>-0.1996</td>
+      <td>0.0055</td>
+    </tr>
+    <tr>
+      <td>df2</td>
+      <td>House_Boulder_vs_CPIInfl</td>
+      <td>179</td>
+      <td>0.6850</td>
+      <td>0.6860</td>
+      <td>0.0009</td>
+      <td>0.3352</td>
+      <td>0.3371</td>
+      <td>0.0019</td>
+    </tr>
+    <tr>
+      <td>df</td>
+      <td>House_Mountain_vs_House_USA</td>
+      <td>381</td>
+      <td>1.2843</td>
+      <td>1.3009</td>
+      <td>0.0166</td>
+      <td>0.9002</td>
+      <td>0.8983</td>
+      <td>-0.0019</td>
+    </tr>
+    <tr>
+      <td>df2</td>
+      <td>House_Colorado_vs_CPIInfl</td>
+      <td>179</td>
+      <td>0.7518</td>
+      <td>0.7449</td>
+      <td>-0.0069</td>
+      <td>0.3887</td>
+      <td>0.3871</td>
+      <td>-0.0016</td>
+    </tr>
+    <tr>
+      <td>df2</td>
+      <td>House_Boulder_vs_Mortgage</td>
+      <td>179</td>
+      <td>0.1055</td>
+      <td>0.1032</td>
+      <td>-0.0023</td>
+      <td>0.0619</td>
+      <td>0.0608</td>
+      <td>-0.0011</td>
+    </tr>
+    <tr>
+      <td>df</td>
+      <td>Mortgage_vs_CPIInfl</td>
+      <td>381</td>
+      <td>0.2089</td>
+      <td>0.2092</td>
+      <td>0.0003</td>
+      <td>0.1768</td>
+      <td>0.1771</td>
+      <td>0.0002</td>
+    </tr>
+    <tr>
+      <td>df2</td>
+      <td>Mortgage_vs_CPIInfl</td>
+      <td>179</td>
+      <td>0.7277</td>
+      <td>0.7280</td>
+      <td>0.0003</td>
+      <td>0.6071</td>
+      <td>0.6071</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>df1</td>
+      <td>Mortgage_vs_CPIInfl</td>
+      <td>619</td>
+      <td>0.6449</td>
+      <td>0.6450</td>
+      <td>0.0002</td>
+      <td>0.5881</td>
+      <td>0.5882</td>
+      <td>0.0000</td>
+    </tr>
+  </tbody>
+</table></div>
+
+    <h2>Trend Lines</h2>
+    <div class="grid">
+      
+            <figure class="card">
+              <img src="line_cpi.png" alt="line_cpi.png" loading="lazy" />
+              <figcaption>line_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_mortgage.png" alt="line_mortgage.png" loading="lazy" />
+              <figcaption>line_mortgage.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_hpi_usa.png" alt="line_hpi_usa.png" loading="lazy" />
+              <figcaption>line_hpi_usa.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_hpi_mountain.png" alt="line_hpi_mountain.png" loading="lazy" />
+              <figcaption>line_hpi_mountain.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_hpi_colorado.png" alt="line_hpi_colorado.png" loading="lazy" />
+              <figcaption>line_hpi_colorado.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_hpi_denver.png" alt="line_hpi_denver.png" loading="lazy" />
+              <figcaption>line_hpi_denver.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="line_hpi_boulder.png" alt="line_hpi_boulder.png" loading="lazy" />
+              <figcaption>line_hpi_boulder.png</figcaption>
+            </figure>
+            
+    </div>
+
+    <h2>Key Scatter & Regression Charts</h2>
+    <div class="grid">
+      
+            <figure class="card">
+              <img src="scatter_hpi_vs_cpi_usa_mountain.png" alt="scatter_hpi_vs_cpi_usa_mountain.png" loading="lazy" />
+              <figcaption>scatter_hpi_vs_cpi_usa_mountain.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="scatter_hpi_vs_cpi_colorado_denver_boulder.png" alt="scatter_hpi_vs_cpi_colorado_denver_boulder.png" loading="lazy" />
+              <figcaption>scatter_hpi_vs_cpi_colorado_denver_boulder.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df_house_usa_vs_cpi.png" alt="reg_df_house_usa_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df_house_usa_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df_house_mountain_vs_cpi.png" alt="reg_df_house_mountain_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df_house_mountain_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df_house_mountain_vs_usa.png" alt="reg_df_house_mountain_vs_usa.png" loading="lazy" />
+              <figcaption>reg_df_house_mountain_vs_usa.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df_mortgage_vs_cpi.png" alt="reg_df_mortgage_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df_mortgage_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df_house_usa_vs_mortgage.png" alt="reg_df_house_usa_vs_mortgage.png" loading="lazy" />
+              <figcaption>reg_df_house_usa_vs_mortgage.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df1_mortgage_vs_cpi.png" alt="reg_df1_mortgage_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df1_mortgage_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df2_boulder_vs_cpi.png" alt="reg_df2_boulder_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df2_boulder_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df2_colorado_vs_cpi.png" alt="reg_df2_colorado_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df2_colorado_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df2_boulder_vs_colorado.png" alt="reg_df2_boulder_vs_colorado.png" loading="lazy" />
+              <figcaption>reg_df2_boulder_vs_colorado.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df2_mortgage_vs_cpi.png" alt="reg_df2_mortgage_vs_cpi.png" loading="lazy" />
+              <figcaption>reg_df2_mortgage_vs_cpi.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="reg_df2_boulder_vs_mortgage.png" alt="reg_df2_boulder_vs_mortgage.png" loading="lazy" />
+              <figcaption>reg_df2_boulder_vs_mortgage.png</figcaption>
+            </figure>
+            
+    </div>
+
+    <h2>Correlation Visuals</h2>
+    <div class="grid">
+      
+            <figure class="card">
+              <img src="df_monthly_1991_2022_corr_heatmap.png" alt="df_monthly_1991_2022_corr_heatmap.png" loading="lazy" />
+              <figcaption>df_monthly_1991_2022_corr_heatmap.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="df_monthly_1991_2022_pairplot.png" alt="df_monthly_1991_2022_pairplot.png" loading="lazy" />
+              <figcaption>df_monthly_1991_2022_pairplot.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="df2_quarterly_1978_2022_corr_heatmap.png" alt="df2_quarterly_1978_2022_corr_heatmap.png" loading="lazy" />
+              <figcaption>df2_quarterly_1978_2022_corr_heatmap.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="df2_quarterly_1978_2022_pairplot.png" alt="df2_quarterly_1978_2022_pairplot.png" loading="lazy" />
+              <figcaption>df2_quarterly_1978_2022_pairplot.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="df3_quarterly_merged_corr_heatmap.png" alt="df3_quarterly_merged_corr_heatmap.png" loading="lazy" />
+              <figcaption>df3_quarterly_merged_corr_heatmap.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="df3_quarterly_merged_pairplot.png" alt="df3_quarterly_merged_pairplot.png" loading="lazy" />
+              <figcaption>df3_quarterly_merged_pairplot.png</figcaption>
+            </figure>
+            
+    </div>
+
+    <h2>K-Means Cluster Views</h2>
+    <div class="grid">
+      
+            <figure class="card">
+              <img src="kmeans_df1_mortgage_cpi_kmeans_k3.png" alt="kmeans_df1_mortgage_cpi_kmeans_k3.png" loading="lazy" />
+              <figcaption>kmeans_df1_mortgage_cpi_kmeans_k3.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df1_mortgage_cpi_kmeans_k4.png" alt="kmeans_df1_mortgage_cpi_kmeans_k4.png" loading="lazy" />
+              <figcaption>kmeans_df1_mortgage_cpi_kmeans_k4.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df1_mortgage_cpi_kmeans_k5.png" alt="kmeans_df1_mortgage_cpi_kmeans_k5.png" loading="lazy" />
+              <figcaption>kmeans_df1_mortgage_cpi_kmeans_k5.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df1_mortgage_cpi_kmeans_k6.png" alt="kmeans_df1_mortgage_cpi_kmeans_k6.png" loading="lazy" />
+              <figcaption>kmeans_df1_mortgage_cpi_kmeans_k6.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df3_all_indexes_kmeans_k4.png" alt="kmeans_df3_all_indexes_kmeans_k4.png" loading="lazy" />
+              <figcaption>kmeans_df3_all_indexes_kmeans_k4.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df3_all_indexes_kmeans_k5.png" alt="kmeans_df3_all_indexes_kmeans_k5.png" loading="lazy" />
+              <figcaption>kmeans_df3_all_indexes_kmeans_k5.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df3_all_indexes_kmeans_k6.png" alt="kmeans_df3_all_indexes_kmeans_k6.png" loading="lazy" />
+              <figcaption>kmeans_df3_all_indexes_kmeans_k6.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df4_inflation_only_kmeans_k4.png" alt="kmeans_df4_inflation_only_kmeans_k4.png" loading="lazy" />
+              <figcaption>kmeans_df4_inflation_only_kmeans_k4.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df4_inflation_only_kmeans_k5.png" alt="kmeans_df4_inflation_only_kmeans_k5.png" loading="lazy" />
+              <figcaption>kmeans_df4_inflation_only_kmeans_k5.png</figcaption>
+            </figure>
+            
+
+            <figure class="card">
+              <img src="kmeans_df4_inflation_only_kmeans_k6.png" alt="kmeans_df4_inflation_only_kmeans_k6.png" loading="lazy" />
+              <figcaption>kmeans_df4_inflation_only_kmeans_k6.png</figcaption>
+            </figure>
+            
+    </div>
+
+    <h2>Raw Output Files</h2>
+    <div class="panel">
+      <ul>
+        <li><a href="regression_summary.csv">regression_summary.csv</a></li>
+        <li><a href="overlap_regression_comparison.csv">overlap_regression_comparison.csv</a></li>
+        <li><a href="overlap_series_delta_summary.csv">overlap_series_delta_summary.csv</a></li>
+        <li><a href="overlap_correlation_delta.csv">overlap_correlation_delta.csv</a></li>
+        <li><a href="overlap_window_summary.csv">overlap_window_summary.csv</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
