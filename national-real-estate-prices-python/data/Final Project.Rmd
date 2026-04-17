@@ -1,0 +1,820 @@
+---
+title: "Final Project"
+author: "Michael Grodecki"
+date: "2022-12-04"
+output: html_document
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+##Read data
+
+#consumer price index: "https://www.usinflationcalculator.com/inflation/consumer-price-index-and-annual-percent-changes-from-1913-to-2008/
+(CPI <- read.csv("C:/R/Project/CPI-U.csv", header=TRUE))
+str(CPI)
+
+#30 year fixed mortgage rates: https://www.freddiemac.com/pmms/pmms30
+(Mortgage_Rates <- read.csv("C:/R/Project/30_year_mortgate_rates.csv", header=TRUE))
+str(Mortgage_Rates)
+
+#Housing price indexes: http://www.fhfa.gov/HPI_master.csv
+#The FHFA House Price Index (HPI) is a broad measure of the movement of single-family house prices
+
+#Housing price index USA
+(HousingIndex_USA <- read.csv("C:/R/Project/Housing_Index_USA.csv", header=TRUE))
+str(HousingIndex_USA)
+
+#Housing price index Mountain Census area
+(HousingIndex_Mountain <- read.csv("C:/R/Project/Housing_Index_Mountain.csv", header=TRUE))
+str(HousingIndex_Mountain)
+
+#Housing price index Colorado
+(HousingIndex_Colorado <- read.csv("C:/R/Project/Housing_Index_Colorado.csv", header=TRUE))
+str(HousingIndex_Colorado)
+
+#Housing price index Denver
+(HousingIndex_Denver <- read.csv("C:/R/Project/Housing_Index_Denver.csv", header=TRUE))
+str(HousingIndex_Denver)
+
+#Housing price index Boulder
+(HousingIndex_Boulder <- read.csv("C:/R/Project/Housing_Index_Boulder.csv", header=TRUE))
+str(HousingIndex_Boulder)
+
+
+```
+
+
+
+```{r}
+library(ggplot2) 
+library(dplyr)
+#Convert Year and Month to Fractional Year
+CPI$FractionalYear <- CPI$Year + CPI$Month/12
+
+Mortgage_Rates$FractionalYear <- Mortgage_Rates$Year + Mortgage_Rates$Month/12
+
+HousingIndex_USA$FractionalYear <- HousingIndex_USA$Year + HousingIndex_USA$Month/12
+
+HousingIndex_Mountain$FractionalYear <- HousingIndex_Mountain$Year + HousingIndex_Mountain$Month/12
+
+
+#Convert Year and Quarter to Fractional Year
+HousingIndex_Colorado$FractionalYear <- HousingIndex_Colorado$Year + HousingIndex_Colorado$Quarter/4
+
+HousingIndex_Denver$FractionalYear <- HousingIndex_Denver$Year + HousingIndex_Denver$Quarter/4
+
+HousingIndex_Boulder$FractionalYear <- HousingIndex_Boulder$Year + HousingIndex_Boulder$Quarter/4
+
+
+#Visualize the data
+CPI %>% ggplot(aes(FractionalYear, Index)) + geom_line() + xlab('Year') + ylab('CPI') +  ggtitle('CPI over Time')
+
+Mortgage_Rates %>% ggplot(aes(FractionalYear, Rate)) +
+              geom_line() + xlab('Year') + ylab('Rate') +  ggtitle('30-Year Fixed Mortgage Rates over Time')
+
+HousingIndex_USA %>% ggplot(aes(FractionalYear, Index)) +
+              geom_line() + ylab('Index') +  ggtitle('Housing Price Index (USA) over Time')
+
+HousingIndex_Mountain %>% ggplot(aes(FractionalYear, Index)) +
+              geom_line() + ylab('Index') +  ggtitle('Housing Price Index (Mountain Census Area) over Time')
+
+HousingIndex_Colorado %>% ggplot(aes(FractionalYear, Index)) +
+              geom_line() + ylab('Index') +  ggtitle('Housing Price Index (Colorado) over Time')
+
+HousingIndex_Denver %>% ggplot(aes(FractionalYear, Index)) +
+              geom_line() + ylab('Index') +  ggtitle('Housing Price Index (Denver) over Time')
+
+HousingIndex_Boulder %>% ggplot(aes(FractionalYear, Index)) +
+              geom_line() + ylab('Index') +  ggtitle('Housing Price Index (Boulder) over Time')
+
+
+#merge CPI with Housing Indexes (USA and Mountain Census Area) into a new dataframe  (1991-2022)
+df = merge(x = CPI, y = HousingIndex_USA, by = "FractionalYear")
+df = merge(x = df, y = HousingIndex_Mountain, by = "FractionalYear")
+df = merge(x = df, y = Mortgage_Rates, by = "FractionalYear")
+
+#select relevant columns and rename
+df <- df[c(1,4,7,10, 13)]
+colnames(df) <- c("Year", "CPI","HousingIndex_USA", "HousingIndex_Mountain", "Mortgage_Rate")
+
+
+#scatterplot of Housing Indexes (USA and Mountain Census Area) vs. CPI
+Consumer_Price_Index <- df$CPI
+Housing_Index_USA <- df$HousingIndex_USA
+Housing_Index_Mountain <- df$HousingIndex_Mountain
+
+plot(Consumer_Price_Index, Housing_Index_Mountain, col='red', pch=19)
+
+#add scatterplot of HousingIndex_USA vs. CPI
+points(Consumer_Price_Index, Housing_Index_USA, col='blue', pch=19)
+
+#add legend
+legend(130, 550, legend=c('Housing Index (USA)', 'Housing Index (Mountain Census Area)'), pch=c(19, 19), col=c('red', 'blue'))
+```
+
+```{r}
+
+
+#merge CPI with Mortgage into a new dataframe df1 (1971-2022)
+df1 = merge(x = CPI, y = Mortgage_Rates, by = "FractionalYear")
+
+#select relevant columns and rename
+df1 <- df1[c(1,4,7)]
+colnames(df1) <- c("Year", "CPI", "Mortgage_Rate")
+
+```
+
+
+
+```{r}
+
+
+#create a new dataframe with Colorado, Denver and Boulder Housing Indexes (sampled quarterly)
+#merge CPI with Housing Indexes into a new dataframe
+df2 = merge(x = CPI, y = HousingIndex_Colorado, by = "FractionalYear")
+df2 = merge(x = df2, y = HousingIndex_Denver, by = "FractionalYear")
+#select relevant columns and rename
+df2 <- df2[c(1,4,7,10)]
+colnames(df2) <- c("FractionalYear", "CPI","HousingIndex_Colorado", "HousingIndex_Denver")
+df2 = merge(x = df2, y = HousingIndex_Boulder, by = "FractionalYear")
+df2 = merge(x = df2, y = Mortgage_Rates, by = "FractionalYear")
+#select relevant columns and rename
+df2 <- df2[c(1,2,3,4,7,10)]
+colnames(df2) <- c("Year", "CPI","HousingIndex_Colorado", "HousingIndex_Denver", "HousingIndex_Boulder", "Mortgage_Rate")
+
+
+
+#scatterplot of Housing Indexes (Colorado, Denver and Boulder) vs. CPI
+Consumer_Price_Index <- df2$CPI
+Housing_Index <- df2$HousingIndex_Colorado
+Housing_Index_Denver <- df2$HousingIndex_Denver
+Housing_Index_Boulder <- df2$HousingIndex_Boulder
+
+plot(Consumer_Price_Index, Housing_Index, col='red', pch=19)
+
+#add scatterplot of HousingIndex_Denver vs. CPI
+points(Consumer_Price_Index, Housing_Index_Denver, col='blue', pch=19)
+
+#add scatterplot of HousingIndex_Boulder vs. CPI
+points(Consumer_Price_Index, Housing_Index_Boulder, col='green', pch=19)
+
+#add legend
+legend(100, 600, legend=c('Housing Index Colorado', 'Housing Index Denver', 'Housing Index Boulder'), 
+       pch=c(19, 19), col=c('red', 'blue', 'green'))
+
+```
+
+```{r}
+#derive inflation rate data for 1991-2022 monthly data (annualized for the first 12 months)
+i=1
+Consumer_Inflation_Rate = c()
+House_Inflation_Rate_USA = c()
+House_Inflation_Rate_Mountain = c()
+n <- length(df$Year)
+for(j in df$Year){
+  if(i<=12){
+    Consumer_Inflation_Rate[i]=12*(df$CPI[i+1]/df$CPI[i]-1)*100   
+    House_Inflation_Rate_USA[i]=12*(df$HousingIndex_USA[i+1]/df$HousingIndex_USA[i]-1)*100
+    House_Inflation_Rate_Mountain[i]=12*(df$HousingIndex_Mountain[i+1]/df$HousingIndex_Mountain[i]-1)*100
+  }
+  else
+  {
+    Consumer_Inflation_Rate[i]=(df$CPI[i]/df$CPI[i-12]-1)*100
+    House_Inflation_Rate_USA[i]=(df$HousingIndex_USA[i]/df$HousingIndex_USA[i-12]-1)*100
+    House_Inflation_Rate_Mountain[i]=(df$HousingIndex_Mountain[i]/df$HousingIndex_Mountain[i-12]-1)*100
+  }
+  i=i+1
+}
+
+#add to the dataframe df
+df = data.frame(df, Consumer_Inflation_Rate)
+df = data.frame(df, House_Inflation_Rate_USA)
+df = data.frame(df, House_Inflation_Rate_Mountain)
+
+
+
+#derive consumer inflation rate data for 1971-2022 monthly data (annualized for the first 12 months)
+i=1
+Consumer_Inflation_Rate = c()
+n <- length(df1$Year)
+for(j in df1$Year){
+  if(i<=12){
+    Consumer_Inflation_Rate[i]=12*(df1$CPI[i+1]/df1$CPI[i]-1)*100   
+  }
+  else
+  {
+    Consumer_Inflation_Rate[i]=(df1$CPI[i]/df1$CPI[i-12]-1)*100
+  }
+  i=i+1
+}
+
+#add to the dataframe df1
+df1 = data.frame(df1, Consumer_Inflation_Rate)
+
+#select relevant columns and rename
+df1 <- df1[c(1,3,4)]
+
+
+
+
+
+
+#derive house inflation rate data for Colorado, Denver, and Boulder 1978-2022 quarterly data (annualized for the first 4 quarters)
+i=1
+Consumer_Inflation_Rate = c()
+House_Inflation_Rate_Colorado = c()
+House_Inflation_Rate_Denver = c()
+House_Inflation_Rate_Boulder = c()
+n2 <- length(df2$Year)
+for(j in df2$Year){
+  if(i<=4){
+    Consumer_Inflation_Rate[i]=4*(df2$CPI[i+1]/df2$CPI[i]-1)*100 
+    House_Inflation_Rate_Colorado[i]=4*(df2$HousingIndex_Colorado[i+1]/df2$HousingIndex_Colorado[i]-1)*100   
+    House_Inflation_Rate_Denver[i]=4*(df2$HousingIndex_Denver[i+1]/df2$HousingIndex_Denver[i]-1)*100
+    House_Inflation_Rate_Boulder[i]=4*(df2$HousingIndex_Boulder[i+1]/df2$HousingIndex_Boulder[i]-1)*100
+  }
+  else
+  {
+    Consumer_Inflation_Rate[i]=(df2$CPI[i]/df2$CPI[i-4]-1)*100
+    House_Inflation_Rate_Colorado[i]=(df2$HousingIndex_Colorado[i]/df2$HousingIndex_Colorado[i-4]-1)*100   
+    House_Inflation_Rate_Denver[i]=(df2$HousingIndex_Denver[i]/df2$HousingIndex_Denver[i-4]-1)*100
+    House_Inflation_Rate_Boulder[i]=(df2$HousingIndex_Boulder[i]/df2$HousingIndex_Boulder[i-4]-1)*100
+  }
+  i=i+1
+}
+
+#add to the dataframe df2
+df2 = data.frame(df2, Consumer_Inflation_Rate)
+df2 = data.frame(df2, House_Inflation_Rate_Colorado)
+df2 = data.frame(df2, House_Inflation_Rate_Denver)
+df2 = data.frame(df2, House_Inflation_Rate_Boulder)
+
+#merge df and df2 into a new dataframe df3
+df3 = merge(x = df2, y = df, by = "Year")
+
+#select relevant columns and rename
+df3 <- df3[c(1,2,3,4,5,6,7,8,9,10,12,13,16,17)]
+colnames(df3)[2] <- "CPI"
+colnames(df3)[6] <- "Mortgage_Rate"
+colnames(df3)[7] <- "Consumer_Inflation_Rate"
+
+```
+
+```{r}
+#install.packages("PerformanceAnalytics")
+library(PerformanceAnalytics)
+chart.Correlation(df[, c('Consumer_Inflation_Rate','Mortgage_Rate','House_Inflation_Rate_USA',
+                         'House_Inflation_Rate_Mountain')], histogram=TRUE, pch=19)
+
+```
+```{r}
+
+chart.Correlation(df2[, c('Consumer_Inflation_Rate','Mortgage_Rate','House_Inflation_Rate_Colorado','House_Inflation_Rate_Denver',
+                          'House_Inflation_Rate_Boulder')], histogram=TRUE, pch=19)
+
+```
+
+```{r}
+
+chart.Correlation(df3[, c('Consumer_Inflation_Rate','Mortgage_Rate','House_Inflation_Rate_Colorado','House_Inflation_Rate_Denver',
+                          'House_Inflation_Rate_Boulder','House_Inflation_Rate_USA','House_Inflation_Rate_Mountain')], histogram=TRUE, pch=19)
+```
+
+
+```{r}
+#Analyze individual correlations for 1991-2022 data (df, monthly)
+
+#scatterplot of House_Inflation_Rate_USA vs. Consumer_Inflation_Rate
+x <- df$Consumer_Inflation_Rate
+y <- df$House_Inflation_Rate_USA
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationUSAVsInflation = lm(House_Inflation_Rate_USA ~ Consumer_Inflation_Rate, data = df)
+summary(lmHouseInflationUSAVsInflation) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -1, y = 10)
+text(paste("House Inflation Rate(USA) vs. Consumer Inflation Rate"), x = 1.5, y = 19)
+
+
+#scatterplot of House_Inflation_Rate_Mountain vs. Consumer_Inflation_Rate
+x <- df$Consumer_Inflation_Rate
+y <- df$House_Inflation_Rate_Mountain
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmInflationVsHouseInflationMountain = lm(Consumer_Inflation_Rate ~ House_Inflation_Rate_Mountain, data = df)
+summary(lmInflationVsHouseInflationMountain) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -1, y = 10)
+text(paste("House Inflation Rate(Mountain) vs. Consumer Inflation Rate"), x = 1.5, y = 24)
+
+
+#scatterplot of House_Inflation_Rate_Mountain vs. House_Inflation_Rate_USA
+x <- df$House_Inflation_Rate_USA
+y <- df$House_Inflation_Rate_Mountain
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationUSAVsHouseInflationMountain = lm(House_Inflation_Rate_USA ~ House_Inflation_Rate_Mountain, data = df)
+summary(lmHouseInflationUSAVsHouseInflationMountain) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -8, y = 10)
+text(paste("House Inflation Rate(Mountain) vs. House Inflation Rate(USA)"), x = 1.5, y = 24)
+
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate
+x <- df$Consumer_Inflation_Rate
+y <- df$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflation = lm(Mortgage_Rate ~ Consumer_Inflation_Rate, data = df) #Create the linear regression
+summary(lmMortgageVsInflation) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -1, y = 7)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (1991-2022)"), x = 1.5, y = 9.3)
+
+
+
+#scatterplot of House_Inflation_Rate_USA vs. Mortgage_Rate
+x <- df$Mortgage_Rate
+y <- df$House_Inflation_Rate_USA
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationUSAVsMortgage = lm(House_Inflation_Rate_USA ~ Mortgage_Rate, data = df) #Create the linear regression
+summary(lmHouseInflationUSAVsMortgage) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 4, y = 11)
+text(paste("House Inflation Rate(USA) vs. Mortgage Rate  (1991-2022)"), x = 6, y = 18)
+```
+```{r}
+
+#Analyze individual correlations for 1978-2022 data (df2, qurterly)
+
+#scatterplot of House_Inflation_Rate_Boulder vs. Consumer_Inflation_Rate
+x <- df2$Consumer_Inflation_Rate
+y <- df2$House_Inflation_Rate_Boulder
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationBoulderVsInflation2 = lm(House_Inflation_Rate_Boulder ~ Consumer_Inflation_Rate, data = df2)
+summary(lmHouseInflationBoulderVsInflation2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 0, y = 18)
+text(paste("House Inflation Rate(Boulder) vs. Consumer Inflation Rate"), x = 5, y = 29)
+
+
+
+
+#scatterplot of House_Inflation_Rate_Colorado vs. Consumer_Inflation_Rate
+x <- df2$Consumer_Inflation_Rate
+y <- df2$House_Inflation_Rate_Colorado
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationColoradoVsInflation2 = lm(House_Inflation_Rate_Colorado ~ Consumer_Inflation_Rate, data = df2)
+summary(lmHouseInflationColoradoVsInflation2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 0, y = 15)
+text(paste("House Inflation Rate(Colorado) vs. Consumer Inflation Rate"), x = 5, y = 20)
+
+
+#scatterplot of House_Inflation_Rate_Boulder vs. House_Inflation_Rate_Colorado
+x <- df2$House_Inflation_Rate_Colorado
+y <- df2$House_Inflation_Rate_Boulder
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationBoulderVsHouseInflationColorado2 = lm(House_Inflation_Rate_Boulder ~ House_Inflation_Rate_Colorado, data = df2)
+summary(lmHouseInflationBoulderVsHouseInflationColorado2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -2, y = 14)
+text(paste("House Inflation Rate(Boulder) vs. House Inflation Rate(Colorado)"), x = 5, y = 28)
+
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate
+x <- df2$Consumer_Inflation_Rate
+y <- df2$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflation2 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = df2) #Create the linear regression
+summary(lmMortgageVsInflation2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 0, y = 14)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (1978-2022)"), x = 5, y = 17)
+
+
+
+
+
+#scatterplot of House_Inflation_Rate_Boulder vs. Mortgage_Rate
+x <- df2$Mortgage_Rate
+y <- df2$House_Inflation_Rate_Boulder
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmHouseInflationBoulderVsMortgageRate2 = lm(House_Inflation_Rate_Boulder ~ Mortgage_Rate, data = df2)
+summary(lmHouseInflationBoulderVsMortgageRate2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 4, y = 19)
+text(paste("House Inflation Rate(Boulder) vs. Mortgage Rate (1978-2022)"), x = 10, y = 30)
+
+
+```
+```{r}
+#Analyze individual correlations for 1971-2022 data (df1, monthly)
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate
+x <- df1$Consumer_Inflation_Rate
+y <- df1$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflation1 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = df1) #Create the linear regression
+summary(lmMortgageVsInflation1) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 0, y = 13)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (1971-2022)"), x = 5, y = 18)
+
+
+```
+
+
+
+```{r}
+library(cluster)
+
+#clustering analysis for the 1991-2022 data with all indexes (df3, quarterly)
+
+##set up parameters and run k-means
+k = 4
+(kmeansModel4 <- kmeans(df3, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansModel4[1])
+
+##View
+clusterGroups4 <-data.frame(df3, kmeansModel4$cluster)
+View(clusterGroups4)
+
+##Plot
+clusplot(df3, kmeansModel4$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+##set up parameters and run k-means
+k = 6
+(kmeansModel6 <- kmeans(df3, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansModel6[1])
+
+##View
+clusterGroups6 <-data.frame(df3, kmeansModel6$cluster)
+View(clusterGroups6)
+
+##Plot
+clusplot(df3, kmeansModel6$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+##set up parameters and run k-means
+k = 5
+(kmeansModel5 <- kmeans(df3, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansModel5[1])
+
+##View
+clusterGroups5 <-data.frame(df3, kmeansModel5$cluster)
+View(clusterGroups5)
+
+##Plot
+clusplot(df3, kmeansModel5$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+```
+```{r}
+#clustering analysis for the 1991-2022 data with only the inflation indexes (df3, quarterly)
+
+#extract relevant columns
+df4 <- df3[c(1,6,7,8,9,10,13,14)]
+
+##set up parameters and run k-means
+k = 4
+(kmeansInflationModel4 <- kmeans(df4, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansInflationModel4[1])
+
+##View
+clusterInflationGroups4 <-data.frame(df4, kmeansInflationModel4$cluster)
+View(clusterInflationGroups4)
+
+##Plot
+clusplot(df4, kmeansInflationModel4$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+
+##set up parameters and run k-means
+k = 5
+(kmeansInflationModel5 <- kmeans(df4, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansInflationModel5[1])
+
+##View
+clusterInflationGroups5 <-data.frame(df4, kmeansInflationModel5$cluster)
+View(clusterInflationGroups5)
+
+##Plot
+clusplot(df4, kmeansInflationModel5$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+
+##set up parameters and run k-means
+k = 6
+(kmeansInflationModel6 <- kmeans(df4, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansInflationModel6[1])
+
+##View
+clusterInflationGroups6 <-data.frame(df4, kmeansInflationModel6$cluster)
+View(clusterInflationGroups6)
+
+##Plot
+clusplot(df4, kmeansInflationModel6$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+
+
+```
+```{r}
+#analyze each of the k-means clusters separately
+cluster1 <- clusterInflationGroups4[clusterInflationGroups4$kmeansInflationModel4.cluster == 1, ]
+cluster2 <- clusterInflationGroups4[clusterInflationGroups4$kmeansInflationModel4.cluster == 2, ]
+cluster3 <- clusterInflationGroups4[clusterInflationGroups4$kmeansInflationModel4.cluster == 3, ]
+cluster4 <- clusterInflationGroups4[clusterInflationGroups4$kmeansInflationModel4.cluster == 4, ]
+
+#Analyze individual correlations for each cluster for the 1991-2022 data
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 1
+x <- cluster1$Consumer_Inflation_Rate
+y <- cluster1$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationCluster1 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = cluster1) #Create the linear regression
+summary(lmMortgageVsInflationCluster1) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 5.7, y = 5)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 1)"), x = 6.5, y = 6)
+
+(cluster1$Year) #data in cluster 1
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 2
+x <- cluster2$Consumer_Inflation_Rate
+y <- cluster2$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationCluster2 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = cluster2) #Create the linear regression
+summary(lmMortgageVsInflationCluster2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -0.7, y = 5.7)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 2)"), x = 1.1, y = 6.5)
+
+(cluster2$Year) #data in cluster 2
+
+
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster3
+x <- cluster3$Consumer_Inflation_Rate
+y <- cluster3$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationCluster3 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = cluster3) #Create the linear regression
+summary(lmMortgageVsInflationCluster3) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 0.5, y = 5)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 3)"), x = 2, y = 6.4)
+
+(cluster3$Year) #data in cluster 3
+
+
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 4
+x <- cluster4$Consumer_Inflation_Rate
+y <- cluster4$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationCluster4 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = cluster4) #Create the linear regression
+summary(lmMortgageVsInflationCluster4) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 1.5, y = 8)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 4)"), x = 2.5, y = 9.5)
+
+(cluster4$Year) #data in cluster 4
+```
+
+
+```{r}
+#clustering analysis for the 1971-2022 data with only the consumer inflation index and mortgage rates (df1, monthly)
+
+
+##set up parameters and run k-means
+k = 4
+(kmeansCPIvsMortgageInflationModel4 <- kmeans(df1, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansCPIvsMortgageInflationModel4[1])
+
+##View
+clusterCPIvsMortgageInflationGroups4 <-data.frame(df1, kmeansCPIvsMortgageInflationModel4$cluster)
+View(clusterCPIvsMortgageInflationGroups4)
+
+##Plot
+clusplot(df1, kmeansCPIvsMortgageInflationModel4$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+
+##set up parameters and run k-means
+k = 5
+(kmeansCPIvsMortgageInflationModel5 <- kmeans(df1, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansCPIvsMortgageInflationModel5[1])
+
+##View
+clusterCPIvsMortgageInflationGroups5 <-data.frame(df1, kmeansCPIvsMortgageInflationModel5$cluster)
+View(clusterCPIvsMortgageInflationGroups5)
+
+##Plot
+clusplot(df1, kmeansCPIvsMortgageInflationModel5$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+
+
+
+##set up parameters and run k-means
+k = 6
+(kmeansCPIvsMortgageInflationModel6 <- kmeans(df1, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansCPIvsMortgageInflationModel6[1])
+
+##View
+clusterCPIvsMortgageInflationGroups6 <-data.frame(df1, kmeansCPIvsMortgageInflationModel6$cluster)
+View(clusterCPIvsMortgageInflationGroups6)
+
+##Plot
+clusplot(df1, kmeansCPIvsMortgageInflationModel6$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+
+##set up parameters and run k-means
+k = 3
+(kmeansCPIvsMortgageInflationModel3 <- kmeans(df1, k, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))
+(kmeansCPIvsMortgageInflationModel3[1])
+
+##View
+clusterCPIvsMortgageInflationGroups3 <-data.frame(df1, kmeansCPIvsMortgageInflationModel3$cluster)
+View(clusterCPIvsMortgageInflationGroups3)
+
+##Plot
+clusplot(df1, kmeansCPIvsMortgageInflationModel3$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+```
+
+
+```{r}
+
+#analyze each of the k-means clusters separately
+Icluster1 <- clusterCPIvsMortgageInflationGroups3[clusterCPIvsMortgageInflationGroups3$kmeansCPIvsMortgageInflationModel3.cluster == 1, ]
+Icluster2 <- clusterCPIvsMortgageInflationGroups3[clusterCPIvsMortgageInflationGroups3$kmeansCPIvsMortgageInflationModel3.cluster == 2, ]
+Icluster3 <- clusterCPIvsMortgageInflationGroups3[clusterCPIvsMortgageInflationGroups3$kmeansCPIvsMortgageInflationModel3.cluster == 3, ]
+
+#Analyze individual correlations for each cluster for the 1971-2022 data
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 1
+x <- Icluster1$Consumer_Inflation_Rate
+y <- Icluster1$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationICluster1 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = Icluster1) #Create the linear regression
+summary(lmMortgageVsInflationICluster1) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = -0.5, y = 5.5)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 1)"), x = 2, y = 6.9)
+
+(Icluster1$Year) #data in cluster 1
+
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 2
+x <- Icluster2$Consumer_Inflation_Rate
+y <- Icluster2$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationICluster2 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = Icluster2) #Create the linear regression
+summary(lmMortgageVsInflationICluster2) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 1.5, y = 15)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 2)"), x = 5.5, y = 18)
+
+(Icluster2$Year) #data in cluster 2
+
+#scatterplot of Mortgage_Rate vs. Consumer_Inflation_Rate for Cluster 3
+x <- Icluster3$Consumer_Inflation_Rate
+y <- Icluster3$Mortgage_Rate
+plot(x, y, col='blue', pch=19)
+
+# Regression line
+abline(lm(y ~ x), col = "red", lwd = 3)
+
+#linear regression
+lmMortgageVsInflationICluster3 = lm(Mortgage_Rate~Consumer_Inflation_Rate, data = Icluster3) #Create the linear regression
+summary(lmMortgageVsInflationICluster3) #Review the results
+
+# Pearson correlation
+text(paste("Correlation:", round(cor(x, y), 2)), x = 1.5, y = 8)
+text(paste("Mortgage Rate vs. Consumer Inflation Rate (Cluster 3)"), x = 4, y = 11)
+
+(Icluster3$Year) #data in cluster 3
+
+
+```
+
+
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
