@@ -1,12 +1,12 @@
 name,x_col,y_col,slope,intercept,r_value,p_value,std_err,sample_size
-House Inflation Rate (USA) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_USA,1.222356956333531,1.4676398523220064,0.3536515430175919,1.148460672508377e-12,0.16606942640165154,381
-House Inflation Rate (Mountain) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Mountain,1.7394762044850094,1.6655263662109965,0.3527556308863729,1.320335298182304e-12,0.23701113377527214,381
-House Inflation Rate (Mountain) vs House Inflation Rate (USA),House_Inflation_Rate_USA,House_Inflation_Rate_Mountain,1.2843034366900656,0.20087532142149644,0.9002136598310818,6.5276377465684374e-139,0.03191091125353539,381
-Mortgage Rate vs Consumer Inflation Rate (1991-2022),Consumer_Inflation_Rate,Mortgage_Rate,0.20893978411052347,5.298285276285993,0.17683105548485775,0.0005250732492679465,0.05973715652999996,381
-House Inflation Rate (USA) vs Mortgage Rate (1991-2022),Mortgage_Rate,House_Inflation_Rate_USA,-0.600067434595685,7.9864776404819535,-0.2051351908390429,5.4858196678084486e-05,0.14706346790734287,381
-House Inflation Rate (Boulder) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Boulder,0.6850245601054302,3.755240932234742,0.33522223447386035,4.497209457956992e-06,0.1447110561796293,179
-House Inflation Rate (Colorado) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Colorado,0.751799260803406,3.046933556270064,0.3886700100304158,7.593886972081489e-08,0.13395891108366523,179
-House Inflation Rate (Boulder) vs House Inflation Rate (Colorado),House_Inflation_Rate_Colorado,House_Inflation_Rate_Boulder,0.9297380320052738,0.8717345545230542,0.8800515933717337,3.865133082351724e-59,0.0377092552520396,179
-Mortgage Rate vs Consumer Inflation Rate (1978-2022),Consumer_Inflation_Rate,Mortgage_Rate,0.7277052495412268,5.010521233130069,0.6070613951160272,2.0972646600988874e-19,0.07160030012964994,179
-House Inflation Rate (Boulder) vs Mortgage Rate (1978-2022),Mortgage_Rate,House_Inflation_Rate_Boulder,0.10551797411514485,5.434940285215875,0.06189791364325643,0.41043660008645494,0.12788812943048292,179
-Mortgage Rate vs Consumer Inflation Rate (1971-2022),Consumer_Inflation_Rate,Mortgage_Rate,0.6448538170370898,5.19344795957444,0.5881291810124875,7.292642033766545e-59,0.03570009643081264,619
+House Inflation Rate (USA) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_USA,1.0815555381375666,1.674520951713017,0.3354165015182581,1.676701049907687e-12,0.14857967559352217,420
+House Inflation Rate (Mountain) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Mountain,1.377016963698594,2.057276044370045,0.29219063816352986,1.0345242142886432e-09,0.22044806899720995,420
+House Inflation Rate (Mountain) vs House Inflation Rate (USA),House_Inflation_Rate_USA,House_Inflation_Rate_Mountain,1.2970013185531089,-0.1810482166627514,0.8874253382405298,1.1234714955869606e-142,0.03295153632497855,420
+Mortgage Rate vs Consumer Inflation Rate (Monthly Series),Consumer_Inflation_Rate,Mortgage_Rate,0.2178999693630044,5.334726091119444,0.19350366102780905,6.562473210419268e-05,0.05403721027664282,420
+House Inflation Rate (USA) vs Mortgage Rate (Monthly Series),Mortgage_Rate,House_Inflation_Rate_USA,-0.5465362289559071,7.687921391158325,-0.1908633482641928,8.280958402545042e-05,0.13748337290443283,420
+House Inflation Rate (Boulder) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Boulder,0.7050413685295969,3.4149141936582046,0.34000458777367676,1.4000050146155648e-06,0.14147399694772494,192
+House Inflation Rate (Colorado) vs Consumer Inflation Rate,Consumer_Inflation_Rate,House_Inflation_Rate_Colorado,0.758248900279185,2.795382493223502,0.3894662319267762,2.3586014065256495e-08,0.13009003269246788,192
+House Inflation Rate (Boulder) vs House Inflation Rate (Colorado),House_Inflation_Rate_Colorado,House_Inflation_Rate_Boulder,0.94642276157116,0.723832395289862,0.8885816366509498,3.2098502627439175e-66,0.035445190175806,192
+Mortgage Rate vs Consumer Inflation Rate (Quarterly Series),Consumer_Inflation_Rate,Mortgage_Rate,0.7222441805037105,4.973563666291174,0.6036404328226335,1.9098764357599878e-20,0.06920334715343972,192
+House Inflation Rate (Boulder) vs Mortgage Rate (Quarterly Series),Mortgage_Rate,House_Inflation_Rate_Boulder,0.12382591899052232,5.023598489126948,0.07144757059571903,0.32472181049846766,0.1254110981327669,192
+Mortgage Rate vs Consumer Inflation Rate (Long Monthly Series),Consumer_Inflation_Rate,Mortgage_Rate,0.641123447534048,5.161801707425906,0.5857890064362967,5.779840048693419e-62,0.034605989424173984,659
